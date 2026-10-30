@@ -1,0 +1,14 @@
+@import 'tailwindcss';
+
+:root { color-scheme: dark; }
+html, body, #root { height: 100%; margin: 0; background: #07090d; font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif; }
+
+.react-flow { background: radial-gradient(ellipse at center, #0e141d 0%, #07090d 70%); }
+.react-flow__edge-path { transition: stroke .2s, stroke-width .2s, opacity .2s; }
+.flow-edge { stroke-dasharray: 6 6; animation: dash 1.2s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -12; } }
+.react-flow__handle { opacity: 0; pointer-events: none; }
+.react-flow__node { transition: opacity .25s, filter .25s; }
+.panel-in { animation: slide .25s ease-out; }
+@keyframes slide { from { transform: translateX(24px); opacity: 0; } to { transform: none; opacity: 1; } }
+@media (prefers-reduced-motion: reduce) { .flow-edge, .panel-in { animation: none; } }
