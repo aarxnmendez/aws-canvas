@@ -42,6 +42,19 @@ export default function Sidebar({ node, related, onClose, onSelect }: Props) {
             ))}
           </ul>
         </section>
+        {node.useCases && node.useCases.length > 0 && (
+          <section>
+            <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-500">When to Use</h3>
+            <ul className="space-y-2">
+              {node.useCases.map((u) => (
+                <li key={u} className="flex gap-2.5 rounded-lg border border-zinc-800 bg-zinc-900/70 px-3 py-2 text-sm text-zinc-200">
+                  <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-zinc-500" />
+                  {u}
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
         <section>
           <h3 className="mb-2 text-xs font-bold uppercase tracking-widest text-zinc-500">Related Connected Services</h3>
           <div className="flex flex-wrap gap-2">

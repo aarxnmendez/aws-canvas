@@ -1,37 +1,46 @@
-import { memo } from 'react'
-import { BaseEdge, getBezierPath, Position, useInternalNode, type EdgeProps, type InternalNode } from '@xyflow/react'
+import { memo, useMemo } from 'react'
+import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath, useStore, type EdgeProps, type Position, type ReactFlowState } from '@xyflow/react'
+import { labelWidthFor, planRoute, type Rect } from '../lib/routing'
 
-function center(n: InternalNode) {
-  const w = n.measured.width ?? 0, h = n.measured.height ?? 0
-  return { x: n.internals.positionAbsolute.x + w / 2, y: n.internals.positionAbsolute.y + h / 2, w, h }
-}
-
-// Point where the line from this node's center toward `to` leaves its rectangle.
-function border(n: InternalNode, to: { x: number; y: number }) {
-  const c = center(n)
-  const dx = to.x - c.x, dy = to.y - c.y
-  const sx = dx === 0 ? Infinity : c.w / 2 / Math.abs(dx)
-  const sy = dy === 0 ? Infinity : c.h / 2 / Math.abs(dy)
-  const t = Math.min(sx, sy)
-  const horizontal = sx < sy
-  const pos = horizontal ? (dx > 0 ? Position.Right : Position.Left) : dy > 0 ? Position.Bottom : Position.Top
-  return { x: c.x + dx * t, y: c.y + dy * t, pos }
-}
+// Smoothstep edge whose sides and middle corridor are chosen per edge so it flows around the cards
+// instead of through them. Cards sit above edges (z-index), and labels are HTML pills with a dark background.
+const rectsSelector = (s: ReactFlowState) => s.nodeLookup
 
 function FloatingEdge({ id, source, target, markerEnd, style, label, data }: EdgeProps) {
-  const s = useInternalNode(source), t = useInternalNode(target)
-  if (!s || !t || !s.measured.width || !t.measured.width) return null
-  const a = border(s, center(t)), b = border(t, center(s))
-  const [path, lx, ly] = getBezierPath({
-    sourceX: a.x, sourceY: a.y, sourcePosition: a.pos, targetX: b.x, targetY: b.y, targetPosition: b.pos, curvature: 0.35,
-  })
+  const lookup = useStore(rectsSelector)
   const { faded, active } = (data ?? {}) as { faded?: boolean; active?: boolean }
+
+  const route = useMemo(() => {
+    const rects: Rect[] = []
+    lookup.forEach((n) => {
+      const w = n.measured.width ?? n.width ?? 0, h = n.measured.height ?? n.height ?? 0
+      if (w && h) rects.push({ id: n.id, x: n.internals.positionAbsolute.x, y: n.internals.positionAbsolute.y, w, h })
+    })
+    const src = rects.find((r) => r.id === source), tgt = rects.find((r) => r.id === target)
+    if (!src || !tgt) return null
+    return planRoute(src, tgt, rects, typeof label === 'string' ? labelWidthFor(label) : 0)
+  }, [lookup, source, target, label])
+
+  if (!route) return null
+  const [path] = getSmoothStepPath({
+    sourceX: route.sx, sourceY: route.sy, sourcePosition: route.sourcePosition as Position,
+    targetX: route.tx, targetY: route.ty, targetPosition: route.targetPosition as Position,
+    borderRadius: 18, centerX: route.centerX, centerY: route.centerY, offset: route.offset,
+  })
+
   return (
     <>
-      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} className={active ? 'flow-edge' : undefined}
-        label={faded ? undefined : label} labelX={lx} labelY={ly}
-        labelStyle={{ fill: active ? '#e4e4e7' : '#64748b', fontSize: 11, fontWeight: 600 }}
-        labelBgStyle={{ fill: '#09090b', fillOpacity: 0.9 }} labelBgPadding={[6, 3]} labelBgBorderRadius={6} />
+      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} className={active ? 'flow-edge' : undefined} />
+      {typeof label === 'string' && !faded && (
+        <EdgeLabelRenderer>
+          <div
+            className={`pointer-events-none absolute rounded border border-slate-800 bg-slate-900/90 px-2 py-0.5 text-[11px] font-medium backdrop-blur-sm ${active ? 'text-slate-200' : 'text-slate-300'}`}
+            style={{ transform: `translate(-50%, -50%) translate(${route.label.x}px, ${route.label.y}px)`, zIndex: 5 }}
+          >
+            {label}
+          </div>
+        </EdgeLabelRenderer>
+      )}
     </>
   )
 }

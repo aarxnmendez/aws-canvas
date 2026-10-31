@@ -1,6 +1,6 @@
 # aws-canvas
 
-Interactive concept map for AWS Certified Cloud Practitioner (CLF-C02), Module 1.
+Interactive concept map for AWS Certified Cloud Practitioner (CLF-C02), Modules 1 and 2.
 Vite + React + [React Flow](https://reactflow.dev) (`@xyflow/react`) + Tailwind CSS v4.
 
 ```bash

@@ -3,7 +3,7 @@ import {
   Background, BackgroundVariant, MarkerType, ReactFlow, ReactFlowProvider, useReactFlow,
   type Edge, type NodeMouseHandler, type NodeTypes, type EdgeTypes,
 } from '@xyflow/react'
-import { CATEGORY, HUBS, LINKS, NODES, type ConceptNode } from './data'
+import { CATEGORY, LINKS, NODES, POSITIONS, RELATIONS, type ConceptNode } from './data'
 import ConceptCard, { type FlowNode } from './components/ConceptNode'
 import FloatingEdge from './components/FloatingEdge'
 import Sidebar from './components/Sidebar'
@@ -11,25 +11,7 @@ import Sidebar from './components/Sidebar'
 const nodeTypes: NodeTypes = { concept: ConceptCard }
 const edgeTypes: EdgeTypes = { floating: FloatingEdge }
 const BY_ID = new Map(NODES.map((n) => [n.id, n]))
-
-// Radial layout: core in the middle, hubs on a ring, leaves fanned around each hub.
-const HUB_ANGLE: Record<string, number> = { concepts: -145, infra: -35, payg: 35, deploy: 145 }
-const rad = (d: number) => (d * Math.PI) / 180
-function layout() {
-  const pos = new Map<string, { x: number; y: number }>([['core', { x: 0, y: 0 }]])
-  for (const h of HUBS) {
-    const a = HUB_ANGLE[h]
-    pos.set(h, { x: Math.cos(rad(a)) * 330, y: Math.sin(rad(a)) * 270 })
-    const kids = NODES.filter((n) => n.hub === h)
-    const spread = 24
-    kids.forEach((k, i) => {
-      const ka = a + (i - (kids.length - 1) / 2) * spread
-      pos.set(k.id, { x: Math.cos(rad(ka)) * 780, y: Math.sin(rad(ka)) * 520 })
-    })
-  }
-  return pos
-}
-const POS = layout()
+const colorOf = (id: string) => CATEGORY[BY_ID.get(id)!.category].color
 
 function matches(n: ConceptNode, q: string) {
   return [n.label, n.badge, ...n.keywords, ...n.triggers].some((s) => s.toLowerCase().includes(q))
@@ -46,7 +28,7 @@ function Canvas() {
 
   const nodes: FlowNode[] = useMemo(
     () => NODES.map((c) => ({
-      id: c.id, type: 'concept', position: POS.get(c.id)!, draggable: true, zIndex: 10, // above all edges
+      id: c.id, type: 'concept', position: POSITIONS[c.id], draggable: true, zIndex: 10, // above all edges
       origin: [0.5, 0.5],
       data: { concept: c, active: c.id === selected, dim: hits ? !hits.has(c.id) : false },
     })),
@@ -59,12 +41,12 @@ function Canvas() {
       const focusIds = [hovered, selected].filter(Boolean) as string[]
       const focusId = focusIds.find((id) => l.source === id || l.target === id)
       const active = !!focusId
-      const color = active ? CATEGORY[BY_ID.get(focusId!)!.category].color : '#334155'
+      const color = active ? colorOf(focusId!) : '#334155'
       const faded = hits ? !(hits.has(l.source) && hits.has(l.target)) : false
       return {
         id: `e${i}`, source: l.source, target: l.target, type: 'floating', label: l.label,
         data: { faded, active },
-        style: { stroke: color, opacity: faded ? 0.08 : active ? 1 : 0.3, strokeWidth: active ? 2.2 : 1 },
+        style: { stroke: color, opacity: faded ? 0.08 : active ? 1 : 0.3, strokeWidth: active ? 2.2 : 1, ...(l.dashed ? { strokeDasharray: '2 6', strokeLinecap: 'round' as const } : {}) },
         markerEnd: { type: MarkerType.ArrowClosed, color, width: active ? 16 : 10, height: active ? 16 : 10 },
       }
     }),
@@ -72,12 +54,12 @@ function Canvas() {
   )
 
   const focus = useCallback((id: string) => {
-    const p = POS.get(id)!
+    const p = POSITIONS[id]
     setSelected(id)
     setCenter(p.x + 190 / 1.1, p.y, { zoom: 1.1, duration: 700 })
   }, [setCenter])
 
-  const onNodeClick: NodeMouseHandler = useCallback((_, n) => focus(n.id), [focus])
+  const onNodeClick: NodeMouseHandler = useCallback((_, n) => { if (n.type === 'concept') focus(n.id) }, [focus])
 
   const onSearch = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter' && hits?.size) focus([...hits][0])
@@ -86,7 +68,7 @@ function Canvas() {
 
   const related = useMemo(() => {
     if (!selected) return []
-    return LINKS.flatMap((l) =>
+    return RELATIONS.flatMap((l) =>
       l.source === selected ? [{ node: BY_ID.get(l.target)!, relation: l.label ?? 'includes' }]
       : l.target === selected ? [{ node: BY_ID.get(l.source)!, relation: l.label ? `${l.label} (from)` : 'part of' }]
       : [])
@@ -109,7 +91,7 @@ function Canvas() {
       {/* Title */}
       <div className="pointer-events-none absolute left-4 top-4 z-10 hidden sm:block">
         <div className="text-lg font-bold tracking-tight text-zinc-50"><span className="text-[#FF9900]">aws</span>-canvas</div>
-        <div className="text-xs text-zinc-500">CLF-C02 · Cloud Practitioner Essentials · Module 1</div>
+        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–2</div>
       </div>
 
       {/* Search */}
