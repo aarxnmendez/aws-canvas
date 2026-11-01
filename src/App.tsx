@@ -46,7 +46,7 @@ function Canvas() {
       return {
         id: `e${i}`, source: l.source, target: l.target, type: 'floating', label: l.label,
         data: { faded, active },
-        style: { stroke: color, opacity: faded ? 0.08 : active ? 1 : 0.3, strokeWidth: active ? 2.2 : 1, ...(l.dashed ? { strokeDasharray: '2 6', strokeLinecap: 'round' as const } : {}) },
+        style: { stroke: color, opacity: faded ? 0.08 : active ? 1 : l.emphasis ? 0.55 : 0.3, strokeWidth: active ? 2.2 : l.emphasis ? 1.8 : 1, ...(l.dashed ? { strokeDasharray: '2 6', strokeLinecap: 'round' as const } : {}) },
         markerEnd: { type: MarkerType.ArrowClosed, color, width: active ? 16 : 10, height: active ? 16 : 10 },
       }
     }),
@@ -91,7 +91,7 @@ function Canvas() {
       {/* Title */}
       <div className="pointer-events-none absolute left-4 top-4 z-10 hidden sm:block">
         <div className="text-lg font-bold tracking-tight text-zinc-50"><span className="text-[#FF9900]">aws</span>-canvas</div>
-        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–2</div>
+        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–3</div>
       </div>
 
       {/* Search */}

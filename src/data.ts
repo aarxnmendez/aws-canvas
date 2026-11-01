@@ -11,6 +11,7 @@ export const CATEGORY: Record<Category, { label: string; color: string; text: st
 export type IconName =
   | 'cloud' | 'concepts' | 'server' | 'globe' | 'region' | 'az' | 'edge' | 'deploy'
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
+  | 's3' | 'ebs' | 'efs' | 'sgw' | 'rds' | 'dynamodb' | 'elasticache' | 'redshift' | 'storage'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
 
 export interface ConceptNode {
@@ -214,33 +215,121 @@ export const NODES: ConceptNode[] = [
     useCases: ['Large-scale data processing jobs', 'Media transcoding', 'Scientific simulations'],
     keywords: ['batch', 'jobs', 'hpc'],
   },
+  {
+    id: 'm3-root', label: 'Module 3: Storage & Databases', badge: 'Module 3', category: 'storage', icon: 'storage',
+    summary: 'Module 3 of AWS Cloud Practitioner Essentials: storage and database services, from object, block and file storage to relational, NoSQL, in-memory and warehouse databases.',
+    triggers: ['Storage services', 'Database services', 'Choose the right storage or database'],
+    keywords: ['module 3', 'storage', 'database', 'overview'],
+  },
+  {
+    id: 's3', label: 'Amazon S3', badge: 'Object Storage', category: 'storage', icon: 's3',
+    summary: 'Object storage for any amount of data. You store objects in buckets and pick a storage class to match how often you access them.',
+    triggers: ['Object storage', 'Buckets and objects', 'Storage classes (S3 Standard, S3 Glacier)', '99.999999999% (11 nines) durability'],
+    useCases: ['Static website hosting', 'Backups and archives', 'Data lakes'],
+    keywords: ['s3', 'bucket', 'object', 'glacier', 'simple storage service'],
+  },
+  {
+    id: 'ebs', label: 'Amazon EBS', badge: 'Block Storage', category: 'storage', icon: 'ebs',
+    summary: 'Persistent block storage volumes for Amazon EC2 instances, like a virtual hard drive attached to your server.',
+    triggers: ['Block storage for Amazon EC2', 'Persistent volumes', 'Tied to a single Availability Zone', 'Snapshots for backup'],
+    useCases: ['Boot volumes for EC2', 'Databases running on EC2'],
+    keywords: ['ebs', 'volume', 'block', 'elastic block store', 'disk'],
+  },
+  {
+    id: 'efs', label: 'Amazon EFS', badge: 'File Storage', category: 'storage', icon: 'efs',
+    summary: 'A managed, scalable network file system (NFS) that many Amazon EC2 instances can mount and share at the same time.',
+    triggers: ['Managed network file system (NFS)', 'Shared across many EC2 instances', 'Scales automatically', 'Spans multiple Availability Zones'],
+    useCases: ['Shared content across web servers', 'Home directories'],
+    keywords: ['efs', 'file system', 'nfs', 'shared storage'],
+  },
+  {
+    id: 'sgw', label: 'AWS Storage Gateway', badge: 'Hybrid Storage', category: 'storage', icon: 'sgw',
+    summary: 'Connects your on-premises applications to AWS cloud storage so you can use the cloud for backup and archive.',
+    triggers: ['Hybrid cloud storage', 'Connects on-premises applications to AWS storage', 'File, volume and tape gateways'],
+    useCases: ['Backing up on-premises data to AWS', 'Replacing physical tape libraries'],
+    keywords: ['storage gateway', 'hybrid', 'on-premises', 'tape'],
+  },
+  {
+    id: 'rds', label: 'Amazon RDS', badge: 'Relational Database', category: 'database', icon: 'rds',
+    summary: 'A managed relational (SQL) database service that handles provisioning, patching, backups and failover for you.',
+    triggers: ['Managed relational database (SQL)', 'Engines include MySQL, PostgreSQL, MariaDB, Oracle, SQL Server and Amazon Aurora', 'Automated backups and patching', 'Multi-AZ deployments'],
+    useCases: ['Web and mobile app backends', 'Moving existing SQL databases to AWS'],
+    keywords: ['rds', 'sql', 'relational', 'aurora', 'mysql', 'postgresql'],
+  },
+  {
+    id: 'dynamodb', label: 'Amazon DynamoDB', badge: 'NoSQL Database', category: 'database', icon: 'dynamodb',
+    summary: 'A serverless NoSQL key-value and document database with single-digit millisecond performance at any scale.',
+    triggers: ['Serverless NoSQL key-value database', 'Single-digit millisecond latency', 'Scales automatically', 'No servers to manage'],
+    useCases: ['Gaming leaderboards and session data', 'Shopping carts at scale', 'IoT data'],
+    keywords: ['dynamodb', 'nosql', 'key-value', 'serverless'],
+  },
+  {
+    id: 'elasticache', label: 'Amazon ElastiCache', badge: 'In-Memory Cache', category: 'database', icon: 'elasticache',
+    summary: 'A managed in-memory data store and cache that speeds up applications by serving frequently used data from memory.',
+    triggers: ['In-memory data store and cache', 'Improves application performance', 'Supports Redis and Memcached'],
+    useCases: ['Caching frequent database queries', 'Session stores', 'Real-time leaderboards'],
+    keywords: ['elasticache', 'cache', 'redis', 'memcached', 'in-memory'],
+  },
+  {
+    id: 'redshift', label: 'Amazon Redshift', badge: 'Data Warehouse', category: 'database', icon: 'redshift',
+    summary: 'A fully managed data warehouse for running fast SQL analytics across petabytes of structured data.',
+    triggers: ['Data warehouse', 'Petabyte-scale analytics', 'SQL queries across structured data', 'Columnar storage'],
+    useCases: ['Business intelligence reporting', 'Analyzing large historical datasets'],
+    keywords: ['redshift', 'warehouse', 'analytics', 'bi'],
+  },
 ]
 
-export interface Link { source: string; target: string; label?: string; dashed?: boolean }
+export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
 
-// Every card lives at the root of the canvas (center coordinates). The certification root sits at the
-// origin; Module 1 fans out left and down, Module 2 right and down. Columns are 380-400px apart and rows
-// 170px apart so edge labels sit in free space.
+
+// Radial layout (center coordinates): the certification root sits at the origin and the module roots orbit it,
+// one per quadrant. Each module's cards open outward, away from the center, in columns 380px apart and rows 170px
+// apart so edge labels sit in free space.
 export const POSITIONS: Record<string, { x: number; y: number }> = {
   'root-clf-c02': { x: 0, y: 0 },
 
-  'm1-root': { x: -800, y: -200 },
-  // Cloud Concepts & Benefits
-  concepts: { x: -1560, y: 200 }, core: { x: -1560, y: 370 }, scale: { x: -1560, y: 540 }, opex: { x: -1560, y: 710 },
-  clientserver: { x: -1180, y: 200 }, agility: { x: -1180, y: 370 }, elasticity: { x: -1180, y: 540 }, payg: { x: -1180, y: 710 },
-  // Shared Responsibility & Migration
-  deploy: { x: -800, y: 200 }, public: { x: -800, y: 370 },
-  hybrid: { x: -420, y: 200 }, private: { x: -420, y: 370 }, security: { x: -420, y: 540 },
-  // AWS Global Infrastructure (closest to Module 2)
-  infra: { x: -40, y: 200 }, edge: { x: -40, y: 370 }, regions: { x: -40, y: 540 }, azs: { x: -40, y: 710 },
+  // Module 1 - upper left, opens left and up
+  'm1-root': { x: -900, y: -400 },
+  infra: { x: -900, y: -1040 },
+  edge: { x: -900, y: -1210 },
+  regions: { x: -900, y: -700 },
+  azs: { x: -900, y: -870 },
+  deploy: { x: -1280, y: -870 },
+  public: { x: -1660, y: -870 },
+  hybrid: { x: -1280, y: -1040 },
+  private: { x: -1280, y: -1210 },
+  security: { x: -1280, y: -700 },
+  concepts: { x: -2040, y: -700 },
+  core: { x: -2420, y: -870 },
+  scale: { x: -2040, y: -1210 },
+  opex: { x: -2420, y: -1210 },
+  clientserver: { x: -2040, y: -870 },
+  agility: { x: -2420, y: -700 },
+  elasticity: { x: -2420, y: -1040 },
+  payg: { x: -2040, y: -1040 },
 
-  'm2-root': { x: 970, y: -200 },
-  // Virtual Machines
-  ec2: { x: 400, y: 200 }, outposts: { x: 400, y: 370 }, lightsail: { x: 400, y: 540 },
-  // Containers & Serverless (two columns)
-  lambda: { x: 780, y: 200 }, eks: { x: 780, y: 540 }, ecs: { x: 1160, y: 200 }, fargate: { x: 1160, y: 710 },
-  // Deployment & Batch
-  beanstalk: { x: 1540, y: 200 }, batch: { x: 1540, y: 540 },
+  // Module 2 - upper right, opens right and up
+  'm2-root': { x: 900, y: -400 },
+  ec2: { x: 900, y: -700 },
+  outposts: { x: 900, y: -870 },
+  lightsail: { x: 900, y: -1040 },
+  lambda: { x: 1280, y: -870 },
+  eks: { x: 1660, y: -1210 },
+  ecs: { x: 1660, y: -870 },
+  fargate: { x: 1660, y: -1040 },
+  beanstalk: { x: 2040, y: -870 },
+  batch: { x: 2040, y: -700 },
+
+  // Module 3 - lower right, opens right and down
+  'm3-root': { x: 900, y: 500 },
+  s3: { x: 1280, y: 800 },
+  sgw: { x: 1280, y: 970 },
+  ebs: { x: 900, y: 970 },
+  efs: { x: 900, y: 800 },
+  rds: { x: 1660, y: 970 },
+  elasticache: { x: 2040, y: 970 },
+  dynamodb: { x: 1660, y: 1140 },
+  redshift: { x: 1660, y: 800 },
 }
 
 // Only real conceptual relations between concepts are drawn (labeled).
@@ -261,6 +350,14 @@ const CROSS_LINKS: Link[] = [
   { source: 'batch', target: 'ec2', label: 'runs on' },
   // Inter-module: instances are deployed in the global infrastructure
   { source: 'ec2', target: 'regions', label: 'deployed in', dashed: true },
+  // Module 3
+  { source: 'sgw', target: 's3', label: 'syncs to' },
+  { source: 'elasticache', target: 'rds', label: 'caches' },
+  { source: 'redshift', target: 's3', label: 'loads from' },
+  // Inter-module: storage and data live in the global infrastructure and attach to compute
+  { source: 'ebs', target: 'ec2', label: 'attached to', dashed: true },
+  { source: 'efs', target: 'ec2', label: 'mounted on', dashed: true },
+  { source: 's3', target: 'regions', label: 'stored in', dashed: true },
 ]
 
 // Parent -> child edges that keep every card connected to its module root (unlabeled, no orphans).
@@ -270,11 +367,14 @@ const PARENT_LINKS: Link[] = [
   { source: 'payg', target: 'opex' }, { source: 'payg', target: 'scale' },
   { source: 'deploy', target: 'public' }, { source: 'infra', target: 'regions' },
   { source: 'ec2', target: 'lightsail' }, { source: 'm2-root', target: 'ecs' },
+  { source: 'm3-root', target: 's3' }, { source: 'm3-root', target: 'ebs' }, { source: 'm3-root', target: 'efs' },
+  { source: 'm3-root', target: 'rds' }, { source: 'm3-root', target: 'dynamodb' }, { source: 'm3-root', target: 'redshift' },
 ]
 
 // The certification root feeds both module roots; each module root points at the lead card of its three zones.
 const ROOT_LINKS: Link[] = [
-  { source: 'root-clf-c02', target: 'm1-root' }, { source: 'root-clf-c02', target: 'm2-root' },
+  { source: 'root-clf-c02', target: 'm1-root', emphasis: true }, { source: 'root-clf-c02', target: 'm2-root', emphasis: true },
+  { source: 'root-clf-c02', target: 'm3-root', emphasis: true },
   { source: 'm1-root', target: 'concepts' }, { source: 'm1-root', target: 'infra' }, { source: 'm1-root', target: 'deploy' },
   { source: 'm2-root', target: 'ec2' }, { source: 'm2-root', target: 'lambda' }, { source: 'm2-root', target: 'beanstalk' },
 ]
