@@ -77,12 +77,13 @@ function Canvas() {
   const btn = 'grid size-10 place-items-center text-zinc-300 transition hover:bg-zinc-800 hover:text-white'
 
   return (
-    <div className="relative h-full w-full overflow-hidden">
+    <div className="relative h-[100dvh] w-full touch-none overflow-hidden">
       <ReactFlow
         nodes={nodes} edges={edges} nodeTypes={nodeTypes} edgeTypes={edgeTypes}
         onNodeClick={onNodeClick} onNodeMouseEnter={(_, n) => setHovered(n.id)} onNodeMouseLeave={() => setHovered(null)} onPaneClick={() => setSelected(null)}
-        fitView fitViewOptions={{ padding: 0.15 }} minZoom={0.2} maxZoom={2}
+        fitView fitViewOptions={{ padding: 0.15 }} minZoom={0.08} maxZoom={2}
         nodesConnectable={false} elementsSelectable={false} onlyRenderVisibleElements
+        panOnDrag panOnScroll={false} zoomOnPinch zoomOnDoubleClick preventScrolling // one-finger pan, pinch zoom, double-tap zoom
         proOptions={{ hideAttribution: true }}
       >
         <Background variant={BackgroundVariant.Dots} gap={28} size={1.2} color="#27303d" />

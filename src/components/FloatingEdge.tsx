@@ -1,4 +1,4 @@
-import { memo, useMemo } from 'react'
+import { memo, useMemo, useState } from 'react'
 import { BaseEdge, EdgeLabelRenderer, getSmoothStepPath, useStore, type EdgeProps, type Position, type ReactFlowState } from '@xyflow/react'
 import { labelWidthFor, planRoute, type Rect } from '../lib/routing'
 
@@ -8,6 +8,7 @@ const rectsSelector = (s: ReactFlowState) => s.nodeLookup
 
 function FloatingEdge({ id, source, target, markerEnd, style, label, data }: EdgeProps) {
   const lookup = useStore(rectsSelector)
+  const [hovered, setHovered] = useState(false)
   const { faded, active } = (data ?? {}) as { faded?: boolean; active?: boolean }
 
   const route = useMemo(() => {
@@ -30,11 +31,14 @@ function FloatingEdge({ id, source, target, markerEnd, style, label, data }: Edg
 
   return (
     <>
-      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} className={active ? 'flow-edge' : undefined} />
+      <BaseEdge id={id} path={path} markerEnd={markerEnd} style={style} className={active || hovered ? 'flow-edge' : undefined} />
+      {/* Wide invisible stroke so the edge itself is hoverable even though selection is disabled. */}
+      <path d={path} fill="none" stroke="transparent" strokeWidth={16} style={{ pointerEvents: 'stroke' }}
+        onMouseEnter={() => setHovered(true)} onMouseLeave={() => setHovered(false)} />
       {typeof label === 'string' && !faded && (
         <EdgeLabelRenderer>
           <div
-            className={`pointer-events-none absolute rounded border border-slate-800 bg-slate-900/90 px-2 py-0.5 text-[11px] font-medium backdrop-blur-sm ${active ? 'text-slate-200' : 'text-slate-300'}`}
+            className={`pointer-events-none absolute rounded border border-slate-800 bg-slate-900/90 px-2 py-0.5 text-[10px] font-medium text-slate-300 shadow-md backdrop-blur-sm transition-opacity duration-200 ${active || hovered ? 'opacity-100' : 'opacity-0'}`}
             style={{ transform: `translate(-50%, -50%) translate(${route.label.x}px, ${route.label.y}px)`, zIndex: 5 }}
           >
             {label}
