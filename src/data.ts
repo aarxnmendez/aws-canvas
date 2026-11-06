@@ -1,4 +1,4 @@
-export type Category = 'core' | 'compute' | 'storage' | 'security' | 'database'
+export type Category = 'core' | 'compute' | 'storage' | 'security' | 'database' | 'networking'
 
 export const CATEGORY: Record<Category, { label: string; color: string; text: string }> = {
   core: { label: 'Core', color: '#FF9900', text: '#FFB84D' },
@@ -6,6 +6,7 @@ export const CATEGORY: Record<Category, { label: string; color: string; text: st
   storage: { label: 'Global Infrastructure', color: '#00A4EF', text: '#5CC8FF' },
   security: { label: 'Security & Deployment', color: '#DD344C', text: '#FF7088' },
   database: { label: 'Benefits', color: '#3B48CC', text: '#8C96FF' },
+  networking: { label: 'Networking & Content Delivery', color: '#8C4FFF', text: '#B58CFF' },
 }
 
 export type IconName =
@@ -13,6 +14,7 @@ export type IconName =
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
   | 'cloudfront' | 'cloudformation' | 'autoscaling' | 'elb' | 'sqs' | 'sns' | 'messaging' | 'containers'
+  | 'vpc' | 'igw' | 'nacl' | 'route53' | 'directconnect' | 'globalaccelerator'
 
 export interface ConceptNode {
   id: string
@@ -287,62 +289,119 @@ export const NODES: ConceptNode[] = [
     useCases: ['Recreate an environment from a template', 'Script deployments with the CLI'],
     keywords: ['console', 'cli', 'sdk', 'cloudformation', 'iac', 'automation'],
   },
+  {
+    id: 'm5-root', label: 'Module 5: Networking', badge: 'Module 5', category: 'networking', icon: 'globe',
+    summary: 'Module 5 of AWS Cloud Practitioner Essentials: networking on AWS, from isolated virtual networks and connectivity to DNS, hybrid links and content acceleration.',
+    triggers: ['Amazon VPC', 'Network security', 'Connectivity to AWS', 'DNS and content delivery'],
+    keywords: ['module 5', 'networking', 'overview'],
+  },
+  {
+    id: 'vpc', label: 'Amazon VPC', badge: 'Virtual Network', category: 'networking', icon: 'vpc',
+    summary: 'Provision a logically isolated section of the AWS Cloud where you launch resources in a virtual network you define. Split it into public and private subnets.',
+    triggers: ['Virtual Private Cloud (VPC)', 'Network isolation', 'Public subnets (internet-facing)', 'Private subnets (no direct internet access)', 'You control IP ranges, route tables and gateways'],
+    useCases: ['Host a public web tier and a private database tier', 'Isolate production from development networks'],
+    keywords: ['vpc', 'subnet', 'virtual private cloud', 'isolation'],
+  },
+  {
+    id: 'gateways', label: 'Internet Gateway & NAT Gateway', badge: 'Internet Connectivity', category: 'networking', icon: 'igw',
+    summary: 'An internet gateway connects a VPC to the internet. A NAT gateway lets instances in private subnets reach the internet without being reachable from it.',
+    triggers: ['Internet gateway: public internet access for public subnets', 'NAT gateway: outbound-only internet for private subnets', 'Private subnets cannot be reached from the internet'],
+    useCases: ['Let public web servers serve internet users', 'Let private servers download patches'],
+    keywords: ['internet gateway', 'igw', 'nat gateway', 'nat'],
+  },
+  {
+    id: 'sgnacl', label: 'Security Groups & Network ACLs', badge: 'Network Security', category: 'networking', icon: 'nacl',
+    summary: 'Two layers of VPC firewall. Security groups protect instances and are stateful; network ACLs protect subnets and are stateless.',
+    triggers: ['Security groups: instance level, stateful, allow rules only', 'Network ACLs: subnet level, stateless, allow and deny rules', 'Default security group denies inbound traffic', 'Return traffic is automatically allowed by stateful rules'],
+    useCases: ['Allow only HTTPS to a web server', 'Block a malicious IP range at the subnet'],
+    keywords: ['security group', 'nacl', 'network acl', 'stateful', 'stateless', 'firewall'],
+  },
+  {
+    id: 'route53', label: 'Amazon Route 53', badge: 'DNS', category: 'networking', icon: 'route53',
+    summary: 'A highly available and scalable managed DNS web service that also handles domain registration and routes users to applications.',
+    triggers: ['Managed Domain Name System (DNS)', 'Domain registration', 'Routing policies (latency, geolocation, failover)', 'Health checks'],
+    useCases: ['Register a domain and point it to a website', 'Route users to the closest Region'],
+    keywords: ['route 53', 'dns', 'domain', 'routing'],
+  },
+  {
+    id: 'connectivity', label: 'AWS Direct Connect & AWS VPN', badge: 'Hybrid Connectivity', category: 'networking', icon: 'directconnect',
+    summary: 'Connect on-premises networks to AWS. Direct Connect is a dedicated private connection; AWS VPN creates encrypted tunnels over the internet.',
+    triggers: ['Direct Connect: dedicated private network connection', 'Site-to-Site VPN: encrypted tunnel between a data center and a VPC', 'Client VPN: remote users connect to AWS', 'Hybrid cloud connectivity'],
+    useCases: ['Consistent bandwidth between a data center and AWS', 'Secure remote access for employees'],
+    keywords: ['direct connect', 'vpn', 'site-to-site', 'client vpn', 'hybrid'],
+  },
+  {
+    id: 'accel', label: 'AWS Global Accelerator & Amazon CloudFront', badge: 'Network Acceleration', category: 'networking', icon: 'globalaccelerator',
+    summary: 'Global Accelerator routes traffic over the AWS global network to optimal endpoints using static IPs; CloudFront caches content at edge locations.',
+    triggers: ['Global Accelerator: static anycast IPs, AWS global network', 'CloudFront: CDN that caches content at edge locations', 'Improve performance and availability for global users'],
+    useCases: ['Speed up a global TCP or UDP application', 'Cache a website closer to users'],
+    keywords: ['global accelerator', 'cloudfront', 'acceleration', 'anycast'],
+  },
 ]
 
 export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
 
-// Radial layout (center coordinates): the certification root sits at the origin and the four module roots orbit it,
-// one per quadrant. Each module's cards open outward, away from the center, in columns 380px apart and rows 170px
+// Radial layout (center coordinates): the certification root sits at the origin and the module roots orbit it
+// clockwise in numeric order, starting at the upper left. Each module's cards open outward, away from the center, in columns 380px apart and rows 170px
 // apart so edge labels sit in free space.
 export const POSITIONS: Record<string, { x: number; y: number }> = {
   'root-clf-c02': { x: 0, y: 0 },
 
-  // Module 1 - upper left, opens left and up
-  'm1-root': { x: -900, y: -400 },
-  concepts: { x: -900, y: -700 },
-  core: { x: -900, y: -870 },
-  clientserver: { x: -900, y: -1040 },
-  deploy: { x: -900, y: -1210 },
-  hybrid: { x: -1280, y: -1210 },
-  public: { x: -1280, y: -1380 },
-  private: { x: -1280, y: -1040 },
-  shared: { x: -1280, y: -700 },
-  infra: { x: -1660, y: -700 },
-  benefits: { x: -2040, y: -700 },
-  opex: { x: -2040, y: -870 },
-  elasticity: { x: -2040, y: -1040 },
-  scale: { x: -2420, y: -870 },
-  agility: { x: -2420, y: -1040 },
+  // Module 1 - north-west, opens left and up
+  'm1-root': { x: -900, y: -500 },
+  concepts: { x: -900, y: -800 },
+  core: { x: -900, y: -970 },
+  clientserver: { x: -900, y: -1140 },
+  deploy: { x: -900, y: -1310 },
+  private: { x: -1280, y: -1140 },
+  hybrid: { x: -1280, y: -1310 },
+  public: { x: -1280, y: -1480 },
+  shared: { x: -1280, y: -800 },
+  infra: { x: -1660, y: -800 },
+  benefits: { x: -2040, y: -800 },
+  opex: { x: -2040, y: -970 },
+  elasticity: { x: -2040, y: -1140 },
+  scale: { x: -2420, y: -970 },
+  agility: { x: -2420, y: -1140 },
 
-  // Module 2 - upper right, opens right and up
-  'm2-root': { x: 900, y: -400 },
-  ec2: { x: 900, y: -700 },
-  ec2types: { x: 900, y: -870 },
-  ec2pricing: { x: 900, y: -1040 },
-  autoscaling: { x: 1280, y: -700 },
-  elb: { x: 1660, y: -700 },
-  messaging: { x: 2040, y: -700 },
-  sqs: { x: 2040, y: -870 },
-  sns: { x: 2040, y: -1040 },
+  // Module 2 - north-east, opens right and up
+  'm2-root': { x: 900, y: -500 },
+  ec2: { x: 900, y: -800 },
+  ec2types: { x: 900, y: -970 },
+  ec2pricing: { x: 900, y: -1140 },
+  autoscaling: { x: 1320, y: -800 },
+  elb: { x: 1700, y: -800 },
+  messaging: { x: 2080, y: -800 },
+  sqs: { x: 2080, y: -970 },
+  sns: { x: 2080, y: -1140 },
 
-  // Module 3 - lower right, opens right and down
-  'm3-root': { x: 900, y: 500 },
-  lambda: { x: 900, y: 800 },
-  containers: { x: 1280, y: 800 },
-  ecs: { x: 1280, y: 970 },
-  eks: { x: 1280, y: 1140 },
-  fargate: { x: 1660, y: 970 },
-  beanstalk: { x: 1660, y: 800 },
-  batch: { x: 2040, y: 800 },
-  lightsail: { x: 2040, y: 970 },
+  // Module 3 - east, opens right in a compact fan
+  'm3-root': { x: 1000, y: 100 },
+  batch: { x: 1380, y: -70 },
+  beanstalk: { x: 1380, y: -240 },
+  containers: { x: 1380, y: 100 },
+  lambda: { x: 1380, y: 270 },
+  lightsail: { x: 1380, y: 440 },
+  ecs: { x: 1760, y: -70 },
+  fargate: { x: 1760, y: 100 },
+  eks: { x: 1760, y: 270 },
 
-  // Module 4 - lower left, opens left and down
-  'm4-root': { x: -900, y: 500 },
-  regions: { x: -900, y: 800 },
-  azs: { x: -900, y: 970 },
-  edge: { x: -1280, y: 800 },
-  outposts: { x: -1660, y: 970 },
-  automation: { x: -1660, y: 800 },
+  // Module 4 - south-east, opens right and down
+  'm4-root': { x: 600, y: 750 },
+  regions: { x: 1360, y: 1050 },
+  azs: { x: 1360, y: 1220 },
+  edge: { x: 980, y: 1050 },
+  automation: { x: 600, y: 1050 },
+  outposts: { x: 600, y: 1220 },
+
+  // Module 5 - south-west, opens left and down
+  'm5-root': { x: -800, y: 750 },
+  vpc: { x: -800, y: 1050 },
+  sgnacl: { x: -800, y: 1220 },
+  gateways: { x: -1180, y: 1050 },
+  route53: { x: -1180, y: 1220 },
+  connectivity: { x: -1560, y: 1050 },
+  accel: { x: -1560, y: 1220 },
 }
 
 // Only real conceptual relations between concepts are drawn (labeled).
@@ -362,10 +421,13 @@ const CROSS_LINKS: Link[] = [
   { source: 'edge', target: 'regions', label: 'caches from' },
   { source: 'outposts', target: 'automation', label: 'managed with' },
   // Inter-module (dashed)
+  { source: 'vpc', target: 'ec2', label: 'launches into', dashed: true },
+  { source: 'route53', target: 'edge', label: 'routes to', dashed: true },
+  { source: 'accel', target: 'edge', label: 'extends', dashed: true },
   { source: 'infra', target: 'regions', label: 'detailed in', dashed: true },
   { source: 'clientserver', target: 'ec2', label: 'runs on', dashed: true },
   { source: 'elasticity', target: 'autoscaling', label: 'delivered by', dashed: true },
-  { source: 'outposts', target: 'hybrid', label: 'enables', dashed: true },
+  { source: 'connectivity', target: 'hybrid', label: 'enables', dashed: true },
   { source: 'regions', target: 'ec2', label: 'hosts', dashed: true },
   { source: 'azs', target: 'ec2', label: 'launch into', dashed: true },
   { source: 'azs', target: 'lambda', label: 'runs across', dashed: true },
@@ -380,6 +442,7 @@ const PARENT_LINKS: Link[] = [
   { source: 'deploy', target: 'hybrid' }, { source: 'deploy', target: 'public' }, { source: 'deploy', target: 'private' },
   { source: 'benefits', target: 'opex' }, { source: 'benefits', target: 'elasticity' },
   { source: 'opex', target: 'scale' }, { source: 'elasticity', target: 'agility' },
+  { source: 'vpc', target: 'gateways' }, { source: 'vpc', target: 'sgnacl' }, { source: 'route53', target: 'accel' },
   { source: 'ec2', target: 'ec2types' }, { source: 'ec2', target: 'ec2pricing' },
   { source: 'messaging', target: 'sqs' }, { source: 'messaging', target: 'sns' },
   { source: 'containers', target: 'ecs' }, { source: 'containers', target: 'eks' }, { source: 'containers', target: 'fargate' },
@@ -395,6 +458,9 @@ const ROOT_LINKS: Link[] = [
   { source: 'm2-root', target: 'elb' }, { source: 'm2-root', target: 'messaging' },
   { source: 'm3-root', target: 'lambda' }, { source: 'm3-root', target: 'containers' },
   { source: 'm3-root', target: 'beanstalk' }, { source: 'm3-root', target: 'batch' }, { source: 'm3-root', target: 'lightsail' },
+  { source: 'root-clf-c02', target: 'm5-root', emphasis: true },
+  { source: 'm5-root', target: 'vpc' }, { source: 'm5-root', target: 'route53' }, { source: 'm5-root', target: 'connectivity' },
+  
   { source: 'm4-root', target: 'regions' }, { source: 'm4-root', target: 'edge' },
   { source: 'm4-root', target: 'automation' }, { source: 'm4-root', target: 'outposts' },
 ]
