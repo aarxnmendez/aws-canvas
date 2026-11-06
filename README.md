@@ -1,14 +1,15 @@
 # aws-canvas
 
-Interactive concept map for AWS Certified Cloud Practitioner (CLF-C02), Modules 1 to 5.
-Vite + React + [React Flow](https://reactflow.dev) (`@xyflow/react`) + Tailwind CSS v4.
+Interactive 360° radial concept map to visually structure and study the official **AWS Certified Cloud Practitioner (CLF-C02)** curriculum.
 
-```bash
-pnpm install
-pnpm dev      # http://localhost:5173
-pnpm build
-pnpm lint
-```
+Live Demo: [aws-canvas.vercel.app](https://aws-canvas.vercel.app)
 
-- Content (nodes, Exam Triggers, links): `src/data.ts`
-- Icons: official AWS Architecture icons in `src/assets/icons/`
+## Tech Stack
+
+- React + Vite
+- React Flow (`@xyflow/react`)
+- Tailwind CSS v4
+
+---
+
+*Disclaimer: AWS Canvas is an independent study tool created for educational purposes for the AWS Certified Cloud Practitioner exam. AWS and related trademarks belong to Amazon.com, Inc.*
