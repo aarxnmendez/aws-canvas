@@ -1,9 +1,10 @@
-export type Category = 'core' | 'compute' | 'storage' | 'security' | 'database' | 'networking'
+export type Category = 'core' | 'compute' | 'global' | 'storage' | 'security' | 'database' | 'networking'
 
 export const CATEGORY: Record<Category, { label: string; color: string; text: string }> = {
   core: { label: 'Core', color: '#FF9900', text: '#FFB84D' },
   compute: { label: 'Compute', color: '#FF9900', text: '#FFB84D' },
-  storage: { label: 'Global Infrastructure', color: '#00A4EF', text: '#5CC8FF' },
+  global: { label: 'Global Infrastructure', color: '#00A4EF', text: '#5CC8FF' },
+  storage: { label: 'Storage', color: '#7AA116', text: '#A6D14A' },
   security: { label: 'Security & Deployment', color: '#DD344C', text: '#FF7088' },
   database: { label: 'Benefits', color: '#3B48CC', text: '#8C96FF' },
   networking: { label: 'Networking & Content Delivery', color: '#8C4FFF', text: '#B58CFF' },
@@ -14,6 +15,7 @@ export type IconName =
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
   | 'cloudfront' | 'cloudformation' | 'autoscaling' | 'elb' | 'sqs' | 'sns' | 'messaging' | 'containers'
+  | 's3' | 'ebs' | 'efs' | 'fsx' | 'sgw' | 'drs'
   | 'vpc' | 'igw' | 'nacl' | 'route53' | 'directconnect' | 'globalaccelerator'
 
 export interface ConceptNode {
@@ -115,7 +117,7 @@ export const NODES: ConceptNode[] = [
     keywords: ['speed', 'innovation', 'fast'],
   },
   {
-    id: 'infra', label: 'Intro to AWS Global Infrastructure', badge: 'Module 1 · Topic', category: 'storage', icon: 'globe',
+    id: 'infra', label: 'Intro to AWS Global Infrastructure', badge: 'Module 1 · Topic', category: 'global', icon: 'globe',
     summary: 'The physical footprint of AWS: Regions, Availability Zones and edge locations worldwide. Module 4 covers them in depth.',
     triggers: ['Global footprint', 'Regions, Availability Zones and edge locations', 'Go global in minutes'],
     keywords: ['infrastructure', 'worldwide', 'data center'],
@@ -249,27 +251,27 @@ export const NODES: ConceptNode[] = [
     keywords: ['lightsail', 'vps', 'website', 'blog'],
   },
   {
-    id: 'm4-root', label: 'Module 4: Going Global', badge: 'Module 4', category: 'storage', icon: 'globe',
+    id: 'm4-root', label: 'Module 4: Going Global', badge: 'Module 4', category: 'global', icon: 'globe',
     summary: 'Module 4 of AWS Cloud Practitioner Essentials: the AWS Global Infrastructure (Regions, Availability Zones and edge locations), hybrid options and the tools used to provision and automate it.',
     triggers: ['AWS Global Infrastructure', 'Regions, Availability Zones and edge locations', 'Provision resources with code'],
     keywords: ['module 4', 'going global', 'global infrastructure', 'overview'],
   },
   {
-    id: 'regions', label: 'AWS Regions', badge: 'Global Infrastructure', category: 'storage', icon: 'region',
+    id: 'regions', label: 'AWS Regions', badge: 'Global Infrastructure', category: 'global', icon: 'region',
     summary: 'Geographic areas that each contain multiple Availability Zones. You choose the Region where your data and resources live.',
     triggers: ['Compliance with data governance and legal requirements', 'Proximity to your customers', 'Feature availability', 'Pricing varies by Region', 'Data is not moved between Regions unless you choose'],
     useCases: ['Keep data in a specific country for compliance', 'Deploy near users to reduce latency'],
     keywords: ['region', 'compliance', 'latency', 'proximity', 'pricing'],
   },
   {
-    id: 'azs', label: 'Availability Zones', badge: 'Global Infrastructure', category: 'storage', icon: 'az',
+    id: 'azs', label: 'Availability Zones', badge: 'Global Infrastructure', category: 'global', icon: 'az',
     summary: 'One or more discrete data centers with redundant power, networking and connectivity inside a Region. Running across multiple AZs gives high availability.',
     triggers: ['Fault isolation', 'High availability', 'Run workloads in at least two AZs', 'Connected by low-latency links'],
     useCases: ['Keep an app online if one data center fails', 'Multi-AZ database deployments'],
     keywords: ['az', 'availability zone', 'fault', 'high availability', 'data center'],
   },
   {
-    id: 'edge', label: 'Edge Locations & CloudFront', badge: 'Content Delivery', category: 'storage', icon: 'cloudfront',
+    id: 'edge', label: 'Edge Locations & CloudFront', badge: 'Content Delivery', category: 'global', icon: 'cloudfront',
     summary: 'Amazon CloudFront is a content delivery network (CDN) that caches content in edge locations close to users, reducing latency.',
     triggers: ['Content delivery network (CDN)', 'Caching at edge locations', 'Reduced latency for global users', 'Edge locations are separate from Regions'],
     useCases: ['Serve website images and video worldwide', 'Speed up static and dynamic content delivery'],
@@ -337,6 +339,54 @@ export const NODES: ConceptNode[] = [
     useCases: ['Speed up a global TCP or UDP application', 'Cache a website closer to users'],
     keywords: ['global accelerator', 'cloudfront', 'acceleration', 'anycast'],
   },
+  {
+    id: 'm6-root', label: 'Module 6: Storage', badge: 'Module 6', category: 'storage', icon: 's3',
+    summary: 'Module 6 of AWS Cloud Practitioner Essentials: object, block and file storage on AWS, hybrid storage and disaster recovery.',
+    triggers: ['Object, block and file storage', 'Choose the right storage service', 'Hybrid storage and disaster recovery'],
+    keywords: ['module 6', 'storage', 'overview'],
+  },
+  {
+    id: 's3', label: 'Amazon S3', badge: 'Object Storage', category: 'storage', icon: 's3',
+    summary: 'Amazon Simple Storage Service stores any amount of data as objects in buckets. Storage classes and lifecycle policies balance cost against access frequency.',
+    triggers: ['Object storage in buckets', '11 nines (99.999999999%) durability', 'Storage classes: S3 Standard, S3 Standard-IA, S3 Intelligent-Tiering, S3 Glacier', 'Lifecycle policies move objects between classes', 'Static website hosting'],
+    useCases: ['Backups and archives', 'Static website hosting', 'Data lakes for analytics'],
+    keywords: ['s3', 'bucket', 'object', 'glacier', 'lifecycle', 'storage class'],
+  },
+  {
+    id: 'ebs', label: 'Amazon EBS', badge: 'Block Storage', category: 'storage', icon: 'ebs',
+    summary: 'Amazon Elastic Block Store provides persistent block-level volumes for EC2 instances, with snapshots for backup.',
+    triggers: ['Block storage for Amazon EC2', 'Persistent volumes (data survives instance stop)', 'Volumes live in a single Availability Zone', 'IOPS and throughput options (SSD and HDD)', 'Incremental snapshots'],
+    useCases: ['Boot and data volumes for EC2', 'Databases on a single instance'],
+    keywords: ['ebs', 'block', 'volume', 'iops', 'snapshot'],
+  },
+  {
+    id: 'efs', label: 'Amazon EFS', badge: 'File Storage', category: 'storage', icon: 'efs',
+    summary: 'Amazon Elastic File System is a managed, elastic NFS file system that many EC2 instances can share at the same time.',
+    triggers: ['Managed file storage (NFS)', 'Shared by multiple EC2 instances', 'Regional: data stored across multiple AZs', 'Grows and shrinks automatically'],
+    useCases: ['Shared content for a fleet of web servers', 'Home directories for Linux users'],
+    keywords: ['efs', 'file system', 'nfs', 'shared'],
+  },
+  {
+    id: 'fsx', label: 'Amazon FSx', badge: 'File Storage', category: 'storage', icon: 'fsx',
+    summary: 'Fully managed, high-performance third-party file systems such as FSx for Windows File Server and FSx for Lustre.',
+    triggers: ['Fully managed third-party file systems', 'FSx for Windows File Server (SMB)', 'FSx for Lustre (high-performance computing)', 'Also NetApp ONTAP and OpenZFS'],
+    useCases: ['Windows file shares for enterprise apps', 'Fast storage for machine learning and HPC'],
+    keywords: ['fsx', 'windows file server', 'lustre', 'smb', 'hpc'],
+  },
+  {
+    id: 'sgw', label: 'AWS Storage Gateway', badge: 'Hybrid Storage', category: 'storage', icon: 'sgw',
+    summary: 'A hybrid cloud storage service that gives on-premises applications access to virtually unlimited AWS storage.',
+    triggers: ['Hybrid cloud storage', 'File Gateway, Volume Gateway, Tape Gateway', 'On-premises access to AWS storage', 'Local caching for low latency'],
+    useCases: ['Replace on-premises tape backups', 'Extend file shares to the cloud'],
+    keywords: ['storage gateway', 'hybrid', 'tape', 'file gateway', 'volume gateway'],
+  },
+  {
+    id: 'drs', label: 'AWS Elastic Disaster Recovery', badge: 'Disaster Recovery', category: 'storage', icon: 'drs',
+    summary: 'Continuously replicates physical, virtual and cloud-based servers to AWS so you can recover quickly after an outage, at low cost.',
+    triggers: ['Disaster recovery (DRS)', 'Continuous block-level replication', 'Minimize downtime and data loss', 'Recover on-premises or cloud servers in AWS', 'Pay only for what you use until a recovery'],
+    useCases: ['Recover an on-premises application in AWS after a data center outage', 'Cost-effective disaster recovery without a duplicate site'],
+    keywords: ['elastic disaster recovery', 'drs', 'disaster recovery', 'replication', 'recovery'],
+  },
 ]
 
 export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
@@ -386,6 +436,15 @@ export const POSITIONS: Record<string, { x: number; y: number }> = {
   fargate: { x: 1760, y: 100 },
   eks: { x: 1760, y: 270 },
 
+  // Module 6 - west, opens left in a compact block centered on its root
+  'm6-root': { x: -1200, y: 150 },
+  ebs: { x: -1580, y: -20 },
+  drs: { x: -1580, y: 150 },
+  sgw: { x: -1580, y: 320 },
+  efs: { x: -1960, y: -20 },
+  fsx: { x: -1960, y: 150 },
+  s3: { x: -1960, y: 320 },
+
   // Module 4 - south-east, opens right and down
   'm4-root': { x: 600, y: 750 },
   regions: { x: 1360, y: 1050 },
@@ -420,11 +479,18 @@ const CROSS_LINKS: Link[] = [
   { source: 'regions', target: 'azs', label: 'contains' },
   { source: 'edge', target: 'regions', label: 'caches from' },
   { source: 'outposts', target: 'automation', label: 'managed with' },
+  // Module 6
+  { source: 'sgw', target: 's3', label: 'syncs to' },
+  { source: 'drs', target: 'ebs', label: 'replicates to' },
+  { source: 'fsx', target: 'efs', label: 'alternative to' },
   // Inter-module (dashed)
+  { source: 'ebs', target: 'ec2', label: 'attached to', dashed: true },
+  { source: 'efs', target: 'ec2', label: 'mounted on', dashed: true },
+  { source: 'sgw', target: 'outposts', label: 'hybrid storage', dashed: true },
   { source: 'vpc', target: 'ec2', label: 'launches into', dashed: true },
   { source: 'route53', target: 'edge', label: 'routes to', dashed: true },
   { source: 'accel', target: 'edge', label: 'extends', dashed: true },
-  { source: 'infra', target: 'regions', label: 'detailed in', dashed: true },
+  { source: 'infra', target: 'm4-root', label: 'detailed in', dashed: true },
   { source: 'clientserver', target: 'ec2', label: 'runs on', dashed: true },
   { source: 'elasticity', target: 'autoscaling', label: 'delivered by', dashed: true },
   { source: 'connectivity', target: 'hybrid', label: 'enables', dashed: true },
@@ -461,6 +527,8 @@ const ROOT_LINKS: Link[] = [
   { source: 'root-clf-c02', target: 'm5-root', emphasis: true },
   { source: 'm5-root', target: 'vpc' }, { source: 'm5-root', target: 'route53' }, { source: 'm5-root', target: 'connectivity' },
   
+  { source: 'root-clf-c02', target: 'm6-root', emphasis: true },
+  { source: 'm6-root', target: 'ebs' }, { source: 'm6-root', target: 's3' }, { source: 'm6-root', target: 'efs' },
   { source: 'm4-root', target: 'regions' }, { source: 'm4-root', target: 'edge' },
   { source: 'm4-root', target: 'automation' }, { source: 'm4-root', target: 'outposts' },
 ]

@@ -92,7 +92,7 @@ function Canvas() {
       {/* Title */}
       <div className="pointer-events-none absolute left-4 top-4 z-10 hidden sm:block">
         <div className="text-lg font-bold tracking-tight text-zinc-50"><span className="text-[#FF9900]">aws</span>-canvas</div>
-        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–5</div>
+        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–6</div>
       </div>
 
       {/* Search */}
@@ -117,7 +117,7 @@ function Canvas() {
 
       {/* Legend */}
       <div className="absolute bottom-4 left-20 z-10 hidden gap-3 rounded-xl border border-zinc-800 bg-zinc-950/90 px-3 py-2 text-xs text-zinc-400 backdrop-blur md:flex">
-        {(['compute', 'storage', 'security', 'database', 'networking'] as const).map((k) => (
+        {(['compute', 'global', 'storage', 'security', 'database', 'networking'] as const).map((k) => (
           <span key={k} className="flex items-center gap-1.5"><i className="size-2 rounded-full" style={{ background: CATEGORY[k].color }} />{CATEGORY[k].label}</span>
         ))}
       </div>
