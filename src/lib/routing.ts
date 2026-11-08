@@ -64,7 +64,7 @@ export function planRoute(src: Rect, tgt: Rect, others: Rect[], labelWidth = 0):
   }
   // U-shaped detour for cards stacked in the same column: leave and re-enter through the same side.
   if (Math.abs(tcx - scx) < 60) {
-    const d = 36
+    const d = Math.max(36, labelWidth / 2 + 12) // keep a label on the detour clear of both cards
     for (const dir of [1, -1] as const) {
       const sx = dir > 0 ? src.x + src.w : src.x, tx = dir > 0 ? tgt.x + tgt.w : tgt.x, sy = scy, ty = tcy
       const segs: [number, number, number, number][] = [[sx, sy, sx + dir * d, sy], [sx + dir * d, sy, sx + dir * d, ty], [sx + dir * d, ty, tx, ty]]

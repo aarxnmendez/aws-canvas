@@ -1,4 +1,6 @@
-export type Category = 'core' | 'compute' | 'global' | 'storage' | 'security' | 'database' | 'networking'
+import { mindMapLayout } from './lib/layout'
+
+export type Category = 'core' | 'compute' | 'global' | 'storage' | 'security' | 'database' | 'databases' | 'networking'
 
 export const CATEGORY: Record<Category, { label: string; color: string; text: string }> = {
   core: { label: 'Core', color: '#FF9900', text: '#FFB84D' },
@@ -7,6 +9,7 @@ export const CATEGORY: Record<Category, { label: string; color: string; text: st
   storage: { label: 'Storage', color: '#7AA116', text: '#A6D14A' },
   security: { label: 'Security & Deployment', color: '#DD344C', text: '#FF7088' },
   database: { label: 'Benefits', color: '#3B48CC', text: '#8C96FF' },
+  databases: { label: 'Databases', color: '#C925D1', text: '#E07BE6' },
   networking: { label: 'Networking & Content Delivery', color: '#8C4FFF', text: '#B58CFF' },
 }
 
@@ -15,6 +18,7 @@ export type IconName =
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
   | 'cloudfront' | 'cloudformation' | 'autoscaling' | 'elb' | 'sqs' | 'sns' | 'messaging' | 'containers'
+  | 'rds' | 'aurora' | 'dynamodb' | 'elasticache' | 'redshift' | 'neptune' | 'documentdb'
   | 's3' | 'ebs' | 'efs' | 'fsx' | 'sgw' | 'drs'
   | 'vpc' | 'igw' | 'nacl' | 'route53' | 'directconnect' | 'globalaccelerator'
 
@@ -387,81 +391,64 @@ export const NODES: ConceptNode[] = [
     useCases: ['Recover an on-premises application in AWS after a data center outage', 'Cost-effective disaster recovery without a duplicate site'],
     keywords: ['elastic disaster recovery', 'drs', 'disaster recovery', 'replication', 'recovery'],
   },
+  {
+    id: 'm7-root', label: 'Module 7: Databases', badge: 'Module 7', category: 'databases', icon: 'rds',
+    summary: 'Module 7 of AWS Cloud Practitioner Essentials: managed relational, NoSQL, in-memory and purpose-built databases on AWS.',
+    triggers: ['Relational vs. NoSQL databases', 'Managed database services', 'Choose the right database for the workload'],
+    keywords: ['module 7', 'databases', 'overview'],
+  },
+  {
+    id: 'rds', label: 'Amazon RDS', badge: 'Relational Database', category: 'databases', icon: 'rds',
+    summary: 'A managed relational database service. AWS handles patching, backups and failover for engines such as MySQL, PostgreSQL, MariaDB, Oracle and SQL Server.',
+    triggers: ['Managed relational database (SQL)', 'MySQL, PostgreSQL, MariaDB, Oracle, SQL Server', 'Multi-AZ for high availability and failover', 'Read replicas to scale reads', 'No operating system access'],
+    useCases: ['Lift and shift an existing Oracle or SQL Server database', 'Transactional business applications'],
+    keywords: ['rds', 'relational', 'sql', 'multi-az', 'read replica'],
+  },
+  {
+    id: 'aurora', label: 'Amazon Aurora', badge: 'Relational Database', category: 'databases', icon: 'aurora',
+    summary: 'A MySQL- and PostgreSQL-compatible relational database built for the cloud, with higher performance and availability than standard engines at a fraction of commercial database cost.',
+    triggers: ['Up to 5x faster than MySQL, 3x faster than PostgreSQL', 'Six copies of data across three Availability Zones', 'Up to 15 read replicas', 'About 1/10 the cost of commercial databases', 'Aurora Serverless adjusts capacity automatically'],
+    useCases: ['High-traffic relational applications', 'Replace a costly commercial database'],
+    keywords: ['aurora', 'mysql compatible', 'postgresql compatible', 'high performance'],
+  },
+  {
+    id: 'dynamodb', label: 'Amazon DynamoDB', badge: 'NoSQL Database', category: 'databases', icon: 'dynamodb',
+    summary: 'A fully managed, serverless key-value and document database that delivers single-digit millisecond performance at any scale.',
+    triggers: ['NoSQL, key-value and document', 'Single-digit millisecond latency', 'Serverless: no servers to manage', 'Global tables (multi-Region)', 'Flexible schema'],
+    useCases: ['Shopping carts and user sessions', 'Gaming leaderboards and IoT data'],
+    keywords: ['dynamodb', 'nosql', 'key-value', 'serverless'],
+  },
+  {
+    id: 'elasticache', label: 'Amazon ElastiCache', badge: 'In-Memory Cache', category: 'databases', icon: 'elasticache',
+    summary: 'A managed in-memory cache using Redis or Memcached that speeds up reads and takes load off the database.',
+    triggers: ['In-memory data store', 'Redis or Memcached', 'Microsecond latency', 'Reduce load on databases'],
+    useCases: ['Cache frequent database queries', 'Session stores and leaderboards'],
+    keywords: ['elasticache', 'cache', 'redis', 'memcached', 'in-memory'],
+  },
+  {
+    id: 'redshift', label: 'Amazon Redshift', badge: 'Data Warehouse', category: 'databases', icon: 'redshift',
+    summary: 'A fully managed, petabyte-scale data warehouse for running analytics on large volumes of structured data.',
+    triggers: ['Data warehouse', 'Columnar storage', 'Petabyte-scale analytics', 'Business intelligence (BI) queries'],
+    useCases: ['Business reporting on years of sales data', 'Analytics across large data sets'],
+    keywords: ['redshift', 'data warehouse', 'analytics', 'columnar', 'olap'],
+  },
+  {
+    id: 'neptune', label: 'Amazon Neptune', badge: 'Graph Database', category: 'databases', icon: 'neptune',
+    summary: 'A managed graph database for highly connected data, such as relationships between people or items.',
+    triggers: ['Graph database', 'Highly connected data', 'Social networks', 'Fraud detection and recommendations'],
+    useCases: ['Social networking features', 'Fraud detection'],
+    keywords: ['neptune', 'graph', 'relationships', 'social network'],
+  },
+  {
+    id: 'documentdb', label: 'Amazon DocumentDB', badge: 'Document Database', category: 'databases', icon: 'documentdb',
+    summary: 'A managed document database compatible with MongoDB, storing data as JSON documents.',
+    triggers: ['Document database (JSON)', 'MongoDB compatibility', 'Managed and scalable', 'Content management and catalogs'],
+    useCases: ['Migrate a MongoDB application to AWS', 'Product catalogs and user profiles'],
+    keywords: ['documentdb', 'mongodb', 'document', 'json'],
+  },
 ]
 
 export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
-
-// Radial layout (center coordinates): the certification root sits at the origin and the module roots orbit it
-// clockwise in numeric order, starting at the upper left. Each module's cards open outward, away from the center, in columns 380px apart and rows 170px
-// apart so edge labels sit in free space.
-export const POSITIONS: Record<string, { x: number; y: number }> = {
-  'root-clf-c02': { x: 0, y: 0 },
-
-  // Module 1 - north-west, opens left and up
-  'm1-root': { x: -900, y: -500 },
-  concepts: { x: -900, y: -800 },
-  core: { x: -900, y: -970 },
-  clientserver: { x: -900, y: -1140 },
-  deploy: { x: -900, y: -1310 },
-  private: { x: -1280, y: -1140 },
-  hybrid: { x: -1280, y: -1310 },
-  public: { x: -1280, y: -1480 },
-  shared: { x: -1280, y: -800 },
-  infra: { x: -1660, y: -800 },
-  benefits: { x: -2040, y: -800 },
-  opex: { x: -2040, y: -970 },
-  elasticity: { x: -2040, y: -1140 },
-  scale: { x: -2420, y: -970 },
-  agility: { x: -2420, y: -1140 },
-
-  // Module 2 - north-east, opens right and up
-  'm2-root': { x: 900, y: -500 },
-  ec2: { x: 900, y: -800 },
-  ec2types: { x: 900, y: -970 },
-  ec2pricing: { x: 900, y: -1140 },
-  autoscaling: { x: 1320, y: -800 },
-  elb: { x: 1700, y: -800 },
-  messaging: { x: 2080, y: -800 },
-  sqs: { x: 2080, y: -970 },
-  sns: { x: 2080, y: -1140 },
-
-  // Module 3 - east, opens right in a compact fan
-  'm3-root': { x: 1000, y: 100 },
-  batch: { x: 1380, y: -70 },
-  beanstalk: { x: 1380, y: -240 },
-  containers: { x: 1380, y: 100 },
-  lambda: { x: 1380, y: 270 },
-  lightsail: { x: 1380, y: 440 },
-  ecs: { x: 1760, y: -70 },
-  fargate: { x: 1760, y: 100 },
-  eks: { x: 1760, y: 270 },
-
-  // Module 6 - west, opens left in a compact block centered on its root
-  'm6-root': { x: -1200, y: 150 },
-  ebs: { x: -1580, y: -20 },
-  drs: { x: -1580, y: 150 },
-  sgw: { x: -1580, y: 320 },
-  efs: { x: -1960, y: -20 },
-  fsx: { x: -1960, y: 150 },
-  s3: { x: -1960, y: 320 },
-
-  // Module 4 - south-east, opens right and down
-  'm4-root': { x: 600, y: 750 },
-  regions: { x: 1360, y: 1050 },
-  azs: { x: 1360, y: 1220 },
-  edge: { x: 980, y: 1050 },
-  automation: { x: 600, y: 1050 },
-  outposts: { x: 600, y: 1220 },
-
-  // Module 5 - south-west, opens left and down
-  'm5-root': { x: -800, y: 750 },
-  vpc: { x: -800, y: 1050 },
-  sgnacl: { x: -800, y: 1220 },
-  gateways: { x: -1180, y: 1050 },
-  route53: { x: -1180, y: 1220 },
-  connectivity: { x: -1560, y: 1050 },
-  accel: { x: -1560, y: 1220 },
-}
 
 // Only real conceptual relations between concepts are drawn (labeled).
 const CROSS_LINKS: Link[] = [
@@ -483,7 +470,12 @@ const CROSS_LINKS: Link[] = [
   { source: 'sgw', target: 's3', label: 'syncs to' },
   { source: 'drs', target: 'ebs', label: 'replicates to' },
   { source: 'fsx', target: 'efs', label: 'alternative to' },
+  // Module 7
+  { source: 'aurora', target: 'rds', label: 'faster than' },
+  { source: 'elasticache', target: 'rds', label: 'caches' },
+  { source: 'documentdb', target: 'dynamodb', label: 'similar to' },
   // Inter-module (dashed)
+  { source: 'redshift', target: 's3', label: 'loads from', dashed: true },
   { source: 'ebs', target: 'ec2', label: 'attached to', dashed: true },
   { source: 'efs', target: 'ec2', label: 'mounted on', dashed: true },
   { source: 'sgw', target: 'outposts', label: 'hybrid storage', dashed: true },
@@ -493,12 +485,10 @@ const CROSS_LINKS: Link[] = [
   { source: 'infra', target: 'm4-root', label: 'detailed in', dashed: true },
   { source: 'clientserver', target: 'ec2', label: 'runs on', dashed: true },
   { source: 'elasticity', target: 'autoscaling', label: 'delivered by', dashed: true },
-  { source: 'connectivity', target: 'hybrid', label: 'enables', dashed: true },
+  { source: 'connectivity', target: 'deploy', label: 'enables', dashed: true },
   { source: 'regions', target: 'ec2', label: 'hosts', dashed: true },
-  { source: 'azs', target: 'ec2', label: 'launch into', dashed: true },
-  { source: 'azs', target: 'lambda', label: 'runs across', dashed: true },
-  { source: 'regions', target: 'ecs', label: 'hosts', dashed: true },
-  { source: 'batch', target: 'ec2', label: 'runs on', dashed: true },
+    { source: 'azs', target: 'ecs', label: 'runs across', dashed: true },
+    { source: 'batch', target: 'ec2', label: 'runs on', dashed: true },
   { source: 'beanstalk', target: 'autoscaling', label: 'configures', dashed: true },
 ]
 
@@ -509,12 +499,13 @@ const PARENT_LINKS: Link[] = [
   { source: 'benefits', target: 'opex' }, { source: 'benefits', target: 'elasticity' },
   { source: 'opex', target: 'scale' }, { source: 'elasticity', target: 'agility' },
   { source: 'vpc', target: 'gateways' }, { source: 'vpc', target: 'sgnacl' }, { source: 'route53', target: 'accel' },
+  { source: 'aurora', target: 'neptune' },
   { source: 'ec2', target: 'ec2types' }, { source: 'ec2', target: 'ec2pricing' },
   { source: 'messaging', target: 'sqs' }, { source: 'messaging', target: 'sns' },
   { source: 'containers', target: 'ecs' }, { source: 'containers', target: 'eks' }, { source: 'containers', target: 'fargate' },
 ]
 
-// The certification root feeds the four module roots; each module root points at the lead cards of its topics.
+// The certification root feeds the module roots; each module root points at the lead cards of its topics.
 const ROOT_LINKS: Link[] = [
   { source: 'root-clf-c02', target: 'm1-root', emphasis: true }, { source: 'root-clf-c02', target: 'm2-root', emphasis: true },
   { source: 'root-clf-c02', target: 'm3-root', emphasis: true }, { source: 'root-clf-c02', target: 'm4-root', emphasis: true },
@@ -526,14 +517,19 @@ const ROOT_LINKS: Link[] = [
   { source: 'm3-root', target: 'beanstalk' }, { source: 'm3-root', target: 'batch' }, { source: 'm3-root', target: 'lightsail' },
   { source: 'root-clf-c02', target: 'm5-root', emphasis: true },
   { source: 'm5-root', target: 'vpc' }, { source: 'm5-root', target: 'route53' }, { source: 'm5-root', target: 'connectivity' },
-  
   { source: 'root-clf-c02', target: 'm6-root', emphasis: true },
   { source: 'm6-root', target: 'ebs' }, { source: 'm6-root', target: 's3' }, { source: 'm6-root', target: 'efs' },
+  { source: 'root-clf-c02', target: 'm7-root', emphasis: true },
+  { source: 'm7-root', target: 'dynamodb' }, { source: 'm7-root', target: 'rds' }, { source: 'm7-root', target: 'elasticache' },
+  { source: 'm7-root', target: 'redshift' },
   { source: 'm4-root', target: 'regions' }, { source: 'm4-root', target: 'edge' },
   { source: 'm4-root', target: 'automation' }, { source: 'm4-root', target: 'outposts' },
 ]
 
 export const LINKS: Link[] = [...ROOT_LINKS, ...PARENT_LINKS, ...CROSS_LINKS]
+
+// Card centers, computed as a balanced mind map (see src/lib/layout.ts) so new modules never need hand-placed coordinates.
+export const POSITIONS = mindMapLayout('root-clf-c02', LINKS)
 
 // Concept-to-concept relations shown in the sidebar (includes the undrawn hub -> child grouping).
 const relationKey = (l: Link) => `${l.source}>${l.target}`
