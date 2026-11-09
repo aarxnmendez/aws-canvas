@@ -36,17 +36,19 @@ function Canvas() {
   )
 
   // Edges stay neutral; only those touching the hovered or selected node light up in its category color.
+  // Dashed cross-module edges stay hidden until one of their nodes is hovered or selected.
   const edges: Edge[] = useMemo(
     () => LINKS.map((l, i) => {
       const focusIds = [hovered, selected].filter(Boolean) as string[]
       const focusId = focusIds.find((id) => l.source === id || l.target === id)
       const active = !!focusId
+      const hidden = !!l.dashed && !active
       const color = active ? colorOf(focusId!) : '#334155'
       const faded = hits ? !(hits.has(l.source) && hits.has(l.target)) : false
       return {
         id: `e${i}`, source: l.source, target: l.target, type: 'floating', label: l.label,
-        data: { faded, active },
-        style: { stroke: color, opacity: faded ? 0.08 : active ? 1 : l.emphasis ? 0.55 : 0.3, strokeWidth: active ? 2.2 : l.emphasis ? 1.8 : 1, ...(l.dashed ? { strokeDasharray: '2 6', strokeLinecap: 'round' as const } : {}) },
+        data: { faded, active, hidden },
+        style: { stroke: color, opacity: hidden ? 0 : faded ? 0.08 : active ? 1 : l.emphasis ? 0.55 : 0.3, strokeWidth: active ? 2.2 : l.emphasis ? 1.8 : 1, ...(l.dashed ? { strokeDasharray: '2 6', strokeLinecap: 'round' as const } : {}) },
         markerEnd: { type: MarkerType.ArrowClosed, color, width: active ? 16 : 10, height: active ? 16 : 10 },
       }
     }),
@@ -92,7 +94,7 @@ function Canvas() {
       {/* Title */}
       <div className="pointer-events-none absolute left-4 top-4 z-10 hidden sm:block">
         <div className="text-lg font-bold tracking-tight text-zinc-50"><span className="text-[#FF9900]">aws</span>-canvas</div>
-        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–7</div>
+        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–8</div>
       </div>
 
       {/* Search */}
@@ -117,7 +119,7 @@ function Canvas() {
 
       {/* Legend */}
       <div className="absolute bottom-4 left-20 z-10 hidden gap-3 rounded-xl border border-zinc-800 bg-zinc-950/90 px-3 py-2 text-xs text-zinc-400 backdrop-blur md:flex">
-        {(['compute', 'global', 'storage', 'security', 'database', 'databases', 'networking'] as const).map((k) => (
+        {(['compute', 'global', 'storage', 'security', 'database', 'databases', 'networking', 'ai'] as const).map((k) => (
           <span key={k} className="flex items-center gap-1.5"><i className="size-2 rounded-full" style={{ background: CATEGORY[k].color }} />{CATEGORY[k].label}</span>
         ))}
       </div>

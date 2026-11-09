@@ -1,6 +1,6 @@
 import { mindMapLayout } from './lib/layout'
 
-export type Category = 'core' | 'compute' | 'global' | 'storage' | 'security' | 'database' | 'databases' | 'networking'
+export type Category = 'core' | 'compute' | 'global' | 'storage' | 'security' | 'database' | 'databases' | 'networking' | 'ai'
 
 export const CATEGORY: Record<Category, { label: string; color: string; text: string }> = {
   core: { label: 'Core', color: '#FF9900', text: '#FFB84D' },
@@ -10,6 +10,7 @@ export const CATEGORY: Record<Category, { label: string; color: string; text: st
   security: { label: 'Security & Deployment', color: '#DD344C', text: '#FF7088' },
   database: { label: 'Benefits', color: '#3B48CC', text: '#8C96FF' },
   databases: { label: 'Databases', color: '#C925D1', text: '#E07BE6' },
+  ai: { label: 'AI/ML & Analytics', color: '#01A88D', text: '#4FD1B8' },
   networking: { label: 'Networking & Content Delivery', color: '#8C4FFF', text: '#B58CFF' },
 }
 
@@ -18,6 +19,8 @@ export type IconName =
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
   | 'cloudfront' | 'cloudformation' | 'autoscaling' | 'elb' | 'sqs' | 'sns' | 'messaging' | 'containers'
+  | 'sagemaker' | 'ai' | 'rekognition' | 'comprehend' | 'polly' | 'transcribe' | 'lex' | 'bedrock'
+  | 'analytics' | 'athena' | 'emr' | 'kinesis' | 'quicksight' | 'glue'
   | 'rds' | 'aurora' | 'dynamodb' | 'elasticache' | 'redshift' | 'neptune' | 'documentdb'
   | 's3' | 'ebs' | 'efs' | 'fsx' | 'sgw' | 'drs'
   | 'vpc' | 'igw' | 'nacl' | 'route53' | 'directconnect' | 'globalaccelerator'
@@ -446,6 +449,108 @@ export const NODES: ConceptNode[] = [
     useCases: ['Migrate a MongoDB application to AWS', 'Product catalogs and user profiles'],
     keywords: ['documentdb', 'mongodb', 'document', 'json'],
   },
+  {
+    id: 'm8-root', label: 'Module 8: AI ML and Data Analytics', badge: 'Module 8', category: 'ai', icon: 'ai',
+    summary: 'Module 8 of AWS Cloud Practitioner Essentials: machine learning with Amazon SageMaker, managed AI services and the AWS data analytics services.',
+    triggers: ['Machine learning (ML)', 'Managed AI services', 'Generative AI', 'Data analytics'],
+    keywords: ['module 8', 'ai', 'ml', 'analytics', 'overview'],
+  },
+  {
+    id: 'sagemaker', label: 'Amazon SageMaker', badge: 'Machine Learning', category: 'ai', icon: 'sagemaker',
+    summary: 'A fully managed service to build, train and deploy machine learning models at scale, without managing the underlying infrastructure.',
+    triggers: ['Build, train and deploy ML models', 'Fully managed ML platform', 'Custom models from your own data', 'No ML infrastructure to manage'],
+    useCases: ['Train a custom fraud-detection model', 'Deploy a model as a real-time endpoint'],
+    keywords: ['sagemaker', 'machine learning', 'ml', 'train', 'model'],
+  },
+  {
+    id: 'aiservices', label: 'AWS Managed AI Services', badge: 'Artificial Intelligence', category: 'ai', icon: 'ai',
+    summary: 'Pre-trained AI services you call through an API, with no machine learning expertise required.',
+    triggers: ['Pre-trained models through APIs', 'No ML expertise needed', 'Pay per use'],
+    keywords: ['ai services', 'pre-trained', 'api'],
+  },
+  {
+    id: 'rekognition', label: 'Amazon Rekognition', badge: 'Computer Vision', category: 'ai', icon: 'rekognition',
+    summary: 'Analyzes images and videos to detect objects, people, text, scenes and inappropriate content, and to recognize faces.',
+    triggers: ['Image and video analysis', 'Facial recognition', 'Object and text detection', 'Content moderation'],
+    useCases: ['Verify identity with facial comparison', 'Moderate user-uploaded images'],
+    keywords: ['rekognition', 'image', 'video', 'face', 'computer vision'],
+  },
+  {
+    id: 'comprehend', label: 'Amazon Comprehend', badge: 'NLP', category: 'ai', icon: 'comprehend',
+    summary: 'A natural language processing (NLP) service that finds insights and relationships in text, such as sentiment, key phrases and entities.',
+    triggers: ['Natural language processing (NLP)', 'Sentiment analysis', 'Key phrases and entities in text'],
+    useCases: ['Analyze customer review sentiment', 'Extract entities from documents'],
+    keywords: ['comprehend', 'nlp', 'sentiment', 'text'],
+  },
+  {
+    id: 'polly', label: 'Amazon Polly', badge: 'Text to Speech', category: 'ai', icon: 'polly',
+    summary: 'Turns text into lifelike speech in many languages and voices.',
+    triggers: ['Text to speech (TTS)', 'Lifelike voices', 'Many languages'],
+    useCases: ['Read articles aloud', 'Voice prompts for apps and devices'],
+    keywords: ['polly', 'text to speech', 'voice', 'tts'],
+  },
+  {
+    id: 'transcribe', label: 'Amazon Transcribe', badge: 'Speech to Text', category: 'ai', icon: 'transcribe',
+    summary: 'Automatic speech recognition that converts audio into text.',
+    triggers: ['Speech to text', 'Automatic speech recognition (ASR)', 'Transcribe calls and media'],
+    useCases: ['Subtitles for videos', 'Transcribe customer service calls'],
+    keywords: ['transcribe', 'speech to text', 'asr', 'audio'],
+  },
+  {
+    id: 'lex', label: 'Amazon Lex', badge: 'Chatbots', category: 'ai', icon: 'lex',
+    summary: 'Builds conversational interfaces (chatbots) with voice and text, using the same technology as Alexa.',
+    triggers: ['Conversational chatbots', 'Voice and text interfaces', 'Same technology as Alexa'],
+    useCases: ['Customer support chatbot', 'Voice-driven booking assistant'],
+    keywords: ['lex', 'chatbot', 'conversational', 'bot'],
+  },
+  {
+    id: 'bedrock', label: 'Amazon Bedrock', badge: 'Generative AI', category: 'ai', icon: 'bedrock',
+    summary: 'A fully managed service to build generative AI applications with foundation models from Amazon and leading AI companies through one API.',
+    triggers: ['Generative AI', 'Foundation models (FMs)', 'Single API to many model providers', 'Customize models with your data'],
+    useCases: ['Build a generative AI assistant', 'Summarize documents with a foundation model'],
+    keywords: ['bedrock', 'generative ai', 'genai', 'foundation model', 'llm'],
+  },
+  {
+    id: 'analyticshub', label: 'Data Analytics on AWS', badge: 'Analytics', category: 'ai', icon: 'analytics',
+    summary: 'Services to collect, process, query and visualize data, from real-time streams to big data and dashboards.',
+    triggers: ['Collect, process, analyze and visualize data', 'Batch and real-time analytics', 'Serverless and managed options'],
+    keywords: ['analytics', 'data', 'big data'],
+  },
+  {
+    id: 'athena', label: 'Amazon Athena', badge: 'Serverless SQL', category: 'ai', icon: 'athena',
+    summary: 'An interactive, serverless query service to analyze data directly in Amazon S3 with standard SQL.',
+    triggers: ['SQL queries directly on S3', 'Serverless', 'Pay per query (data scanned)', 'No data loading required'],
+    useCases: ['Query log files stored in S3', 'Ad hoc analysis of a data lake'],
+    keywords: ['athena', 'sql', 's3', 'query', 'serverless'],
+  },
+  {
+    id: 'emr', label: 'Amazon EMR', badge: 'Big Data', category: 'ai', icon: 'emr',
+    summary: 'A managed big data platform for processing large data sets with open-source frameworks such as Apache Hadoop and Apache Spark.',
+    triggers: ['Big data processing', 'Apache Hadoop and Apache Spark', 'Managed clusters'],
+    useCases: ['Process petabytes of clickstream data', 'Large-scale data transformations'],
+    keywords: ['emr', 'elastic mapreduce', 'hadoop', 'spark', 'big data'],
+  },
+  {
+    id: 'kinesis', label: 'Amazon Kinesis', badge: 'Streaming', category: 'ai', icon: 'kinesis',
+    summary: 'Collects, processes and analyzes real-time streaming data, such as video, logs and IoT telemetry.',
+    triggers: ['Real-time streaming data', 'Ingest and process data as it arrives', 'Video, logs and IoT telemetry'],
+    useCases: ['Live dashboards from clickstream data', 'Real-time IoT sensor processing'],
+    keywords: ['kinesis', 'streaming', 'real-time', 'data streams'],
+  },
+  {
+    id: 'quicksight', label: 'Amazon QuickSight', badge: 'Business Intelligence', category: 'ai', icon: 'quicksight',
+    summary: 'A serverless business intelligence (BI) service for interactive dashboards and visualizations.',
+    triggers: ['Business intelligence (BI)', 'Interactive dashboards and visualizations', 'Serverless, pay per session'],
+    useCases: ['Executive sales dashboards', 'Share interactive reports'],
+    keywords: ['quicksight', 'bi', 'dashboard', 'visualization'],
+  },
+  {
+    id: 'glue', label: 'AWS Glue', badge: 'ETL', category: 'ai', icon: 'glue',
+    summary: 'A serverless data integration service to discover, prepare and combine data (extract, transform, load) for analytics.',
+    triggers: ['ETL: extract, transform, load', 'Serverless data integration', 'Data Catalog'],
+    useCases: ['Prepare raw S3 data for Athena', 'Move data into Redshift'],
+    keywords: ['glue', 'etl', 'data catalog', 'integration'],
+  },
 ]
 
 export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
@@ -474,7 +579,14 @@ const CROSS_LINKS: Link[] = [
   { source: 'aurora', target: 'rds', label: 'faster than' },
   { source: 'elasticache', target: 'rds', label: 'caches' },
   { source: 'documentdb', target: 'dynamodb', label: 'similar to' },
+  // Module 8
+  { source: 'transcribe', target: 'polly', label: 'reverse of' },
+  { source: 'glue', target: 'athena', label: 'catalogs for' },
+  { source: 'quicksight', target: 'athena', label: 'visualizes' },
   // Inter-module (dashed)
+  { source: 'athena', target: 's3', label: 'queries', dashed: true },
+  { source: 'quicksight', target: 'redshift', label: 'visualizes', dashed: true },
+  { source: 'emr', target: 'ec2', label: 'runs on', dashed: true },
   { source: 'redshift', target: 's3', label: 'loads from', dashed: true },
   { source: 'ebs', target: 'ec2', label: 'attached to', dashed: true },
   { source: 'efs', target: 'ec2', label: 'mounted on', dashed: true },
@@ -500,6 +612,10 @@ const PARENT_LINKS: Link[] = [
   { source: 'opex', target: 'scale' }, { source: 'elasticity', target: 'agility' },
   { source: 'vpc', target: 'gateways' }, { source: 'vpc', target: 'sgnacl' }, { source: 'route53', target: 'accel' },
   { source: 'aurora', target: 'neptune' },
+  { source: 'aiservices', target: 'rekognition' }, { source: 'aiservices', target: 'comprehend' }, { source: 'aiservices', target: 'transcribe' },
+  { source: 'aiservices', target: 'polly' }, { source: 'aiservices', target: 'lex' }, { source: 'aiservices', target: 'bedrock' },
+  { source: 'analyticshub', target: 'athena' }, { source: 'analyticshub', target: 'glue' }, { source: 'analyticshub', target: 'quicksight' },
+  { source: 'analyticshub', target: 'emr' }, { source: 'analyticshub', target: 'kinesis' },
   { source: 'ec2', target: 'ec2types' }, { source: 'ec2', target: 'ec2pricing' },
   { source: 'messaging', target: 'sqs' }, { source: 'messaging', target: 'sns' },
   { source: 'containers', target: 'ecs' }, { source: 'containers', target: 'eks' }, { source: 'containers', target: 'fargate' },
@@ -519,9 +635,12 @@ const ROOT_LINKS: Link[] = [
   { source: 'm5-root', target: 'vpc' }, { source: 'm5-root', target: 'route53' }, { source: 'm5-root', target: 'connectivity' },
   { source: 'root-clf-c02', target: 'm6-root', emphasis: true },
   { source: 'm6-root', target: 'ebs' }, { source: 'm6-root', target: 's3' }, { source: 'm6-root', target: 'efs' },
+  { source: 'm6-root', target: 'sgw' }, { source: 'm6-root', target: 'drs' }, { source: 'm6-root', target: 'fsx' },
   { source: 'root-clf-c02', target: 'm7-root', emphasis: true },
   { source: 'm7-root', target: 'dynamodb' }, { source: 'm7-root', target: 'rds' }, { source: 'm7-root', target: 'elasticache' },
   { source: 'm7-root', target: 'redshift' },
+  { source: 'root-clf-c02', target: 'm8-root', emphasis: true },
+  { source: 'm8-root', target: 'sagemaker' }, { source: 'm8-root', target: 'aiservices' }, { source: 'm8-root', target: 'analyticshub' },
   { source: 'm4-root', target: 'regions' }, { source: 'm4-root', target: 'edge' },
   { source: 'm4-root', target: 'automation' }, { source: 'm4-root', target: 'outposts' },
 ]
