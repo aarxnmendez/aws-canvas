@@ -19,6 +19,7 @@ export type IconName =
   | 'public' | 'private' | 'hybrid' | 'money' | 'elastic' | 'shield' | 'agility' | 'scale' | 'receipt'
   | 'ec2' | 'lightsail' | 'outposts' | 'lambda' | 'ecs' | 'eks' | 'fargate' | 'beanstalk' | 'batch'
   | 'cloudfront' | 'cloudformation' | 'autoscaling' | 'elb' | 'sqs' | 'sns' | 'messaging' | 'containers'
+  | 'security' | 'iam' | 'waf' | 'awsshield' | 'kms' | 'secrets' | 'guardduty' | 'inspector' | 'artifact'
   | 'sagemaker' | 'ai' | 'rekognition' | 'comprehend' | 'polly' | 'transcribe' | 'lex' | 'bedrock'
   | 'analytics' | 'athena' | 'emr' | 'kinesis' | 'quicksight' | 'glue'
   | 'rds' | 'aurora' | 'dynamodb' | 'elasticache' | 'redshift' | 'neptune' | 'documentdb'
@@ -551,6 +552,98 @@ export const NODES: ConceptNode[] = [
     useCases: ['Prepare raw S3 data for Athena', 'Move data into Redshift'],
     keywords: ['glue', 'etl', 'data catalog', 'integration'],
   },
+  {
+    id: 'm9-root', label: 'Module 9: Security', badge: 'Module 9', category: 'security', icon: 'security',
+    summary: 'Module 9 of AWS Cloud Practitioner Essentials: the shared responsibility model, access control, network and application protection, data protection, threat detection and compliance.',
+    triggers: ['Shared responsibility model', 'Preventing unauthorized access', 'Protecting networks, applications and data', 'Detecting and responding to threats'],
+    keywords: ['module 9', 'security', 'overview'],
+  },
+  {
+    id: 'sec-access', label: 'Preventing Unauthorized Access', badge: 'Security Topic', category: 'security', icon: 'security',
+    summary: 'Who is responsible for what, and how you control who can do what in your AWS account.',
+    triggers: ['Shared responsibility model', 'Identity and access management', 'Least privilege'],
+    keywords: ['access', 'identity', 'authorization'],
+  },
+  {
+    id: 'srm', label: 'Shared Responsibility Model', badge: 'Security Concept', category: 'security', icon: 'shield',
+    summary: 'AWS is responsible for security OF the cloud (hardware, software, facilities, network). The customer is responsible for security IN the cloud (data, IAM, OS, network and firewall configuration, encryption).',
+    triggers: ['Security OF the cloud = AWS', 'Security IN the cloud = customer', 'Customer owns data, IAM and encryption', 'Responsibility shifts with the service type (IaaS vs. managed)'],
+    keywords: ['shared responsibility', 'of the cloud', 'in the cloud', 'customer', 'aws'],
+  },
+  {
+    id: 'iam', label: 'AWS IAM', badge: 'Identity & Access', category: 'security', icon: 'iam',
+    summary: 'AWS Identity and Access Management controls who can sign in and what they can do, using users, groups, roles and JSON policies.',
+    triggers: ['Users, groups, roles and policies', 'Root user: protect it, do not use it daily', 'Multi-factor authentication (MFA)', 'Principle of least privilege', 'Roles grant temporary credentials'],
+    useCases: ['Give developers only the permissions they need', 'Let an EC2 instance access S3 through a role'],
+    keywords: ['iam', 'user', 'group', 'role', 'policy', 'mfa', 'least privilege'],
+  },
+  {
+    id: 'sec-network', label: 'Protecting Networks and Applications', badge: 'Security Topic', category: 'security', icon: 'security',
+    summary: 'Shield web applications from malicious requests and distributed denial-of-service (DDoS) attacks.',
+    triggers: ['Web application firewall', 'DDoS protection'],
+    keywords: ['network', 'application', 'ddos', 'firewall'],
+  },
+  {
+    id: 'waf', label: 'AWS WAF', badge: 'Web Application Firewall', category: 'security', icon: 'waf',
+    summary: 'A web application firewall that filters HTTP and HTTPS requests with rules (web ACLs), protecting against attacks such as SQL injection and cross-site scripting.',
+    triggers: ['Web application firewall (Layer 7)', 'Filters HTTP/HTTPS requests', 'Protects against SQL injection and XSS', 'Web ACLs, rate limits, IP block lists', 'Works with CloudFront, ALB and API Gateway'],
+    useCases: ['Block SQL injection attempts on a web app', 'Rate-limit abusive IP addresses'],
+    keywords: ['waf', 'firewall', 'sql injection', 'xss', 'layer 7', 'web acl'],
+  },
+  {
+    id: 'awsshield', label: 'AWS Shield', badge: 'DDoS Protection', category: 'security', icon: 'awsshield',
+    summary: 'Managed protection against DDoS attacks. Shield Standard is automatic and free for every customer; Shield Advanced adds detection, mitigation, a response team and cost protection.',
+    triggers: ['DDoS protection', 'Shield Standard: automatic and free', 'Shield Advanced: paid, 24/7 DDoS Response Team', 'Cost protection against DDoS scaling charges'],
+    useCases: ['Keep a public website online during a DDoS attack', 'Advanced protection for critical internet-facing apps'],
+    keywords: ['shield', 'ddos', 'standard', 'advanced'],
+  },
+  {
+    id: 'sec-data', label: 'Protecting Data', badge: 'Security Topic', category: 'security', icon: 'security',
+    summary: 'Encrypt data and keep credentials out of your code.',
+    triggers: ['Encryption at rest and in transit', 'Key management', 'Secrets rotation'],
+    keywords: ['data', 'encryption', 'keys', 'secrets'],
+  },
+  {
+    id: 'kms', label: 'AWS KMS', badge: 'Encryption Keys', category: 'security', icon: 'kms',
+    summary: 'AWS Key Management Service creates and controls the cryptographic keys used to encrypt your data across AWS services.',
+    triggers: ['Create and manage encryption keys', 'Encryption at rest', 'Integrated with S3, EBS, RDS and more', 'Control and audit key usage'],
+    useCases: ['Encrypt S3 objects and EBS volumes', 'Control who can use an encryption key'],
+    keywords: ['kms', 'key management', 'encryption', 'keys'],
+  },
+  {
+    id: 'secrets', label: 'AWS Secrets Manager', badge: 'Credentials', category: 'security', icon: 'secrets',
+    summary: 'Stores, manages and automatically rotates secrets such as database credentials and API keys, so they never live in your code.',
+    triggers: ['Store and retrieve secrets', 'Automatic rotation of credentials', 'Database passwords and API keys', 'No hardcoded credentials'],
+    useCases: ['Rotate RDS database passwords automatically', 'Keep API keys out of source code'],
+    keywords: ['secrets manager', 'secrets', 'rotation', 'credentials', 'api key'],
+  },
+  {
+    id: 'sec-detect', label: 'Detecting and Responding', badge: 'Security Topic', category: 'security', icon: 'security',
+    summary: 'Find threats and vulnerabilities in your environment and respond quickly.',
+    triggers: ['Threat detection', 'Vulnerability scanning', 'Continuous monitoring'],
+    keywords: ['detection', 'threats', 'vulnerabilities'],
+  },
+  {
+    id: 'guardduty', label: 'Amazon GuardDuty', badge: 'Threat Detection', category: 'security', icon: 'guardduty',
+    summary: 'An intelligent threat detection service that continuously monitors accounts and workloads, using machine learning to analyze logs and network activity.',
+    triggers: ['Intelligent threat detection', 'Machine learning and anomaly detection', 'Analyzes VPC Flow Logs, DNS logs and CloudTrail events', 'Continuous monitoring, no agents'],
+    useCases: ['Detect compromised instances or credentials', 'Alert on unusual API activity'],
+    keywords: ['guardduty', 'threat detection', 'machine learning', 'anomaly'],
+  },
+  {
+    id: 'inspector', label: 'Amazon Inspector', badge: 'Vulnerability Scanning', category: 'security', icon: 'inspector',
+    summary: 'Automatically scans EC2 instances, container images and Lambda functions for software vulnerabilities and unintended network exposure.',
+    triggers: ['Automated vulnerability scanning', 'EC2 instances, container images and Lambda', 'Software vulnerabilities (CVEs)', 'Prioritized security findings'],
+    useCases: ['Find unpatched software on EC2 instances', 'Scan container images before deployment'],
+    keywords: ['inspector', 'vulnerability', 'scan', 'cve'],
+  },
+  {
+    id: 'artifact', label: 'AWS Artifact', badge: 'Compliance', category: 'security', icon: 'artifact',
+    summary: 'A self-service portal for on-demand access to AWS security and compliance reports and select online agreements.',
+    triggers: ['Compliance reports', 'AWS audit reports (SOC, PCI, ISO)', 'Agreements (for example BAA)', 'On-demand and self-service'],
+    useCases: ['Download a SOC report for an auditor', 'Review AWS compliance documentation'],
+    keywords: ['artifact', 'compliance', 'audit', 'reports', 'soc', 'pci'],
+  },
 ]
 
 export interface Link { source: string; target: string; label?: string; dashed?: boolean; emphasis?: boolean }
@@ -584,6 +677,10 @@ const CROSS_LINKS: Link[] = [
   { source: 'glue', target: 'athena', label: 'catalogs for' },
   { source: 'quicksight', target: 'athena', label: 'visualizes' },
   // Inter-module (dashed)
+  { source: 'shared', target: 'srm', label: 'detailed in', dashed: true },
+  { source: 'waf', target: 'edge', label: 'protects', dashed: true },
+  { source: 'kms', target: 's3', label: 'encrypts', dashed: true },
+  { source: 'inspector', target: 'ec2', label: 'scans', dashed: true },
   { source: 'athena', target: 's3', label: 'queries', dashed: true },
   { source: 'quicksight', target: 'redshift', label: 'visualizes', dashed: true },
   { source: 'emr', target: 'ec2', label: 'runs on', dashed: true },
@@ -616,6 +713,10 @@ const PARENT_LINKS: Link[] = [
   { source: 'aiservices', target: 'polly' }, { source: 'aiservices', target: 'lex' }, { source: 'aiservices', target: 'bedrock' },
   { source: 'analyticshub', target: 'athena' }, { source: 'analyticshub', target: 'glue' }, { source: 'analyticshub', target: 'quicksight' },
   { source: 'analyticshub', target: 'emr' }, { source: 'analyticshub', target: 'kinesis' },
+  { source: 'sec-access', target: 'srm' }, { source: 'sec-access', target: 'iam' },
+  { source: 'sec-network', target: 'waf' }, { source: 'sec-network', target: 'awsshield' },
+  { source: 'sec-data', target: 'kms' }, { source: 'sec-data', target: 'secrets' },
+  { source: 'sec-detect', target: 'guardduty' }, { source: 'sec-detect', target: 'inspector' },
   { source: 'ec2', target: 'ec2types' }, { source: 'ec2', target: 'ec2pricing' },
   { source: 'messaging', target: 'sqs' }, { source: 'messaging', target: 'sns' },
   { source: 'containers', target: 'ecs' }, { source: 'containers', target: 'eks' }, { source: 'containers', target: 'fargate' },
@@ -641,6 +742,9 @@ const ROOT_LINKS: Link[] = [
   { source: 'm7-root', target: 'redshift' },
   { source: 'root-clf-c02', target: 'm8-root', emphasis: true },
   { source: 'm8-root', target: 'sagemaker' }, { source: 'm8-root', target: 'aiservices' }, { source: 'm8-root', target: 'analyticshub' },
+  { source: 'root-clf-c02', target: 'm9-root', emphasis: true },
+  { source: 'm9-root', target: 'sec-access' }, { source: 'm9-root', target: 'sec-network' }, { source: 'm9-root', target: 'sec-data' },
+  { source: 'm9-root', target: 'sec-detect' }, { source: 'm9-root', target: 'artifact' },
   { source: 'm4-root', target: 'regions' }, { source: 'm4-root', target: 'edge' },
   { source: 'm4-root', target: 'automation' }, { source: 'm4-root', target: 'outposts' },
 ]

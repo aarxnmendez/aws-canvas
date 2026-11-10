@@ -94,7 +94,7 @@ function Canvas() {
       {/* Title */}
       <div className="pointer-events-none absolute left-4 top-4 z-10 hidden sm:block">
         <div className="text-lg font-bold tracking-tight text-zinc-50"><span className="text-[#FF9900]">aws</span>-canvas</div>
-        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–8</div>
+        <div className="text-xs text-zinc-500">AWS Certified Cloud Practitioner · Modules 1–9</div>
       </div>
 
       {/* Search */}
